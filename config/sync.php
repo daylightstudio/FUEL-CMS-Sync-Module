@@ -4,7 +4,7 @@
 | FUEL NAVIGATION: An array of navigation items for the left menu
 |--------------------------------------------------------------------------
 */
-$config['nav']['tools']['sync'] = 'Sync';
+$config['nav']['tools']['tools/sync'] = 'Sync';
 
 
 /*
