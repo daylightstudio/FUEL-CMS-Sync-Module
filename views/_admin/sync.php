@@ -18,6 +18,7 @@
 				success : function(html){
 					$('#sync_log').html(html);
 					$('#sync_loader').hide();
+					$('.submit').attr('disabled', false).removeClass('disabled');
 				}
 			}
 			$('#form').ajaxForm(params)
