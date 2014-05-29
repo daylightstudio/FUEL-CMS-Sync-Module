@@ -1,4 +1,4 @@
-# USER GUIDE MODULE FOR FUEL CMS
+# SYNC MODULE FOR FUEL CMS
 This is a [FUEL CMS](http://www.getfuelcms.com) sync module that will sync up your database and asset files with a remote server.
 
 ## INSTALLATION
