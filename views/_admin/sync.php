@@ -7,23 +7,15 @@
 	<div id="sync_log">
 	</div>
 
-	<script type="text/javascript">
-	//<![CDATA[
+	<script>
 		$(function(){
 			var params = {
-				beforeSubmit : function(){
-					$('#sync_loader').show();
-				},
-
 				success : function(html){
 					$('#sync_log').html(html);
-					$('#sync_loader').hide();
 					$('.submit').attr('disabled', false).removeClass('disabled');
 				}
 			}
 			$('#form').ajaxForm(params)
-
 		})
-	//]]>
 	</script>
 </div>
