@@ -426,7 +426,7 @@ class Fuel_sync extends Fuel_advanced_module {
 		}
 
 		$db_sync_prefs['format'] = 'txt';
-		$backup =& $this->CI->dbutil->backup($db_sync_prefs);
+		$backup = $this->CI->dbutil->backup($db_sync_prefs);
 
 		return $backup;	
 	}
