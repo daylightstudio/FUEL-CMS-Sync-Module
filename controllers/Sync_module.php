@@ -34,7 +34,8 @@ class Sync_module extends Fuel_base_controller {
 
 		$fields['General'] = array('type' => 'fieldset', 'class' => 'tab');
 		$fields['remote'] = array('type' => 'select', 'options' => $this->fuel->sync->remote_options(), 'comment' => lang('sync_comment_remotes'));
-		$asset_folder_options = $this->fuel->assets->dirs();
+		// $asset_folder_options = $this->fuel->assets->dirs();
+		$asset_folder_options = array_combine($this->fuel->sync->asset_folders, $this->fuel->sync->asset_folders);
 		$fields['include'] = array('type' => 'multi', 'options' => array('assets' => 'assets', 'data' => 'data'), 'value' => $config['include'], 'comment' => lang('sync_comment_include'));
 		if ($this->fuel->modules->exists('backup'))
 		{
@@ -43,7 +44,7 @@ class Sync_module extends Fuel_base_controller {
 		$fields['test_mode'] = array('type' => 'checkbox', 'value' => 1, 'checked' => $config['test_mode'], 'comment' => lang('sync_comment_test_mode'));
 
 		$fields['Assets'] = array('type' => 'fieldset', 'class' => 'tab');
-		$fields['asset_folders'] = array('type' => 'multi', 'options' => $asset_folder_options, 'value' => $config['asset_folders'], 'comment' => lang('sync_comment_asset_folders'));
+		$fields['asset_folders'] = array('type' => 'multi', 'mode' => 'multi', 'options' => $asset_folder_options, 'value' => $config['asset_folders'], 'comment' => lang('sync_comment_asset_folders'));
 		$fields['allow_deletes'] = array('type' => 'checkbox', 'value' => 1, 'checked' => $config['allow_deletes'], 'comment' => lang('sync_comment_allow_deletes'));
 		$fields['asset_compare_methods'] = array('type' => 'multi', 'options' => array('date' => 'date', 'size' => 'size'), 'value' => $config['asset_compare_methods'], 'comment' => lang('sync_comment_asset_compare_methods'));
 		$fields['change_threshold'] = array('type' => 'number', 'style' => 'width: 50px;', 'size' => 5, 'value' => $config['change_threshold'], 'comment' => lang('sync_comment_remotes'));
@@ -75,7 +76,6 @@ class Sync_module extends Fuel_base_controller {
 			$config['change_threshold'] = (int) $this->input->post('change_threshold');
 			$config['exclude_assets'] = $this->input->post('exclude_assets');
 			$config['test_mode'] = ($this->input->post('test_mode')) ? TRUE : FALSE;
-
 			$this->fuel->sync->pull($config);
 			$vars['log_msg'] = $this->fuel->sync->display_log('all', 'span', TRUE);
 			$this->load->module_view(SYNC_FOLDER, '_admin/sync_results', $vars);

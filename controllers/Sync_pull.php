@@ -18,7 +18,8 @@ class Sync_pull extends CI_Controller {
 	function assets()
 	{
 		$this->load->helper('ajax');
-		$local_assets = $this->fuel->sync->local_assets();
+		$folders = ($this->input->post('asset_folders')) ? json_decode($this->input->post('asset_folders'), TRUE) : NULL;
+		$local_assets = $this->fuel->sync->local_assets($folders);
 		$this->output->set_output(json_encode($local_assets));
 		if (is_ajax())
 		{
