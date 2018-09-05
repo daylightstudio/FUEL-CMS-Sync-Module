@@ -4,7 +4,7 @@ $lang['sync_error_no_remote'] = 'Please set a valid remote location';
 $lang['sync_error_remote_assets'] = 'Error getting remote assets: %1s "%2s"';
 $lang['sync_error_remote_data'] = 'Error getting remote data: "%s"';
 $lang['sync_error_invalid_token'] = 'Invalid token for syncing';
-$lang['sync_error_exceeded_threshold'] = 'The number of files to sync is greater then the threshold %s';
+$lang['sync_error_exceeded_threshold'] = 'The number of files to sync is %1s which is greater then the threshold %2s';
 $lang['sync_error_remote'] = 'Error syncing: %1s "%2s"';
 $lang['sync_backed_up'] = 'Backed up: %s';
 

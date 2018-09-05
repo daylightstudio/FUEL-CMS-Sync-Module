@@ -52,3 +52,7 @@ $config['sync']['db_sync_prefs'] = array('tables'  => array(),
 				'add_drop'    => TRUE,              // whether to add DROP TABLE statements to backup file
 				'add_insert'  => TRUE,              // whether to add INSERT data to backup file
 				);
+
+// additional options for the CURL requests
+$config['sync']['additional_curl_options'] = array();
+

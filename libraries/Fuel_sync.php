@@ -32,6 +32,7 @@ class Fuel_sync extends Fuel_advanced_module {
 	public $create_backup = TRUE; // determines whether to create a backup of the assets and data before running the sync
 	public $test_mode = FALSE; // determines whether to run the syncing process in test mode which will not alter any assets or data and just provide you a log of what will happen
 	public $new_folder_permissions = 0777; // the folder permissions assigned to newly created folders during the sync
+	public $additional_curl_options = array();// additional CURL request options for the remote source
 	public $db_sync_prefs = array(
 				'tables'      => array(),           // the database tables to include in the sync. AUTO will automatically sync the basic FUEL tables as well as all custom module tables
 				'ignore'      => array(),           // list of tables to omit from the backup
@@ -126,7 +127,7 @@ class Fuel_sync extends Fuel_advanced_module {
 		{
 			$this->set_params($params);
 		}
-		
+
 		// if no remote is set, then we return and add the error
 		if (empty($this->remote))
 		{
@@ -181,11 +182,10 @@ class Fuel_sync extends Fuel_advanced_module {
 		// get the differences between local and remote files that need to be synced locally
 		$to_sync = $this->local_diff_to_sync();
 
-
 		// check if the number of files is above the specified threshold and if so, add error and return
 		if (count($to_sync) >= $this->change_threshold)
 		{
-			$this->log_message(lang('sync_error_exceeded_threshold', $this->change_threshold));
+			$this->log_message(lang('sync_error_exceeded_threshold', count($to_sync), $this->change_threshold));
 			return;
 		}
 
@@ -216,6 +216,8 @@ class Fuel_sync extends Fuel_advanced_module {
 						$this->CI->curl->set_option(CURLOPT_FILE, $fp);
 					}
 					
+					$this->CI->curl->set_options($this->additional_curl_options);
+
 					$this->CI->curl->exec();
 
 					// log any curl errors
@@ -289,7 +291,8 @@ class Fuel_sync extends Fuel_advanced_module {
 
 		$assets_path = assets_server_path();
 		$files = array();
-		foreach($folders as $folder)
+
+		foreach((array)$folders as $folder)
 		{
 			$asset_files = get_dir_file_info($assets_path.$folder, FALSE);	
 			foreach($asset_files as $file => $info)
@@ -326,13 +329,18 @@ class Fuel_sync extends Fuel_advanced_module {
 
 		$remote_url = $this->remote_asset_url();
 		$post['token'] = $this->get_token();
+		$post['asset_folders'] = json_encode($this->asset_folders);
+
 		$this->CI->curl->add_session($remote_url, 'post', $post);
+		$this->CI->curl->set_options($this->additional_curl_options);
 
 		$data = $this->CI->curl->exec();
+
 		if ($this->CI->curl->has_error())
 		{
 			$this->log_message(lang('sync_error_remote_assets', $remote_url, current($this->CI->curl->error())));
 		}
+
 		$data_decoded = json_decode($data, TRUE);
 		$this->_remote_assets = $data_decoded;
 		return $data_decoded;
