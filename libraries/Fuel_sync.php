@@ -59,7 +59,6 @@ class Fuel_sync extends Fuel_advanced_module {
 		parent::__construct();
 		$this->initialize($params);
 		$this->CI->load->library('curl');
-		$this->CI->load->library('encrypt');
 		$this->CI->load->helper('file');
 
 		$curl_opts = array('timeout' => 60, 'connect_timeout' => 60);
@@ -640,7 +639,7 @@ class Fuel_sync extends Fuel_advanced_module {
 	 */
 	function get_token()
 	{
-		return $this->CI->encrypt->hash($this->CI->config->item('encryption_key'));
+		return hash($this->CI->config->item('encryption_key'));
 	}
 
 	// --------------------------------------------------------------------
@@ -654,7 +653,7 @@ class Fuel_sync extends Fuel_advanced_module {
 	function validate()
 	{
 
-		if ($this->is_enabled() AND isset($_POST['token']) AND $_POST['token'] == $this->CI->encrypt->hash($this->CI->config->item('encryption_key')))
+		if ($this->is_enabled() AND isset($_POST['token']) AND $_POST['token'] == hash($this->CI->config->item('encryption_key')))
 		{
 			return TRUE;
 		}
